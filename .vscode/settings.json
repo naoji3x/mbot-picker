@@ -1,5 +1,30 @@
 {
+  // 保存時に自動フォーマット
+  "editor.formatOnSave": true,
+
+  // C/C++ 拡張の組み込みフォーマッタを使用
+  "C_Cpp.formatting": "vcFormat",
+
+  // 言語ごとに明示（任意）
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "[c]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+
+  "files.associations": {
+    "*.h": "cpp",
+    "*.hpp": "cpp",
+    "*.hh": "cpp",
+    "*.ino": "cpp"           // Arduino等をC++として整形したい場合（不要なら削除）
+  },
+
+  // そのほか既存設定
   "python-envs.defaultEnvManager": "ms-python.python:conda",
   "python-envs.defaultPackageManager": "ms-python.python:conda",
-  "python-envs.pythonProjects": []
+  "python-envs.pythonProjects": [],
+  "cSpell.words": [
+    "HUSKYLENS"
+  ]
 }
