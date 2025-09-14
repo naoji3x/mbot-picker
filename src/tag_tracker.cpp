@@ -13,7 +13,7 @@ const int   CENTER_X = FRAME_W / 2;
 const int   BASE_FWD = 60;     // 基本前進（0〜255）
 const float KP_TURN = 0.5f;   // 向き誤差→旋回ゲイン
 const float KP_DIST = 0.008f; // 面積誤差→前後ゲイン
-const int   TARGET_AREA = 7000;   // 目標の見かけ面積（近さの基準）
+const int   TARGET_AREA = 14000;   // 目標の見かけ面積（近さの基準）
 const int   MAX_PWM = 200;    // 出力上限（0〜255）
 const int   SEARCH_PWM = 80;     // 見失い時の探索速度（その場旋回）
 
@@ -81,6 +81,10 @@ void setupTagTracker() {
 #endif
 }
 
+
+static int left;
+static int right;
+
 void loopTagTracker() {
     bool found = false;
     HUSKYLENSResult tgt;
@@ -95,7 +99,13 @@ void loopTagTracker() {
 
     if (!found) {
         // 見失い：停止
-        setMotor(0, 0); // 停止
+        if (left != 0) {
+            left += (left < 0) ? 1 : -1;
+        }
+        if (right != 0) {
+            right += (right < 0) ? 1 : -1;
+        }
+        setMotor(left, right); // 停止
         delay(20);
         return;
     }
@@ -110,8 +120,8 @@ void loopTagTracker() {
     int fwd = BASE_FWD + (int)(KP_DIST * errA);
 
     // 左右出力（前進は L:- / R:+）
-    int left = -fwd + turn;
-    int right = +fwd + turn;
+    left = -fwd + turn;
+    right = +fwd + turn;
 
     left = constrain(left, -MAX_PWM, MAX_PWM);
     right = constrain(right, -MAX_PWM, MAX_PWM);
